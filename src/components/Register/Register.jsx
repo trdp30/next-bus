@@ -4,7 +4,6 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Input,
   Typography,
 } from "@material-tailwind/react";
@@ -18,7 +17,7 @@ function Register() {
     confirmPassword: "",
     address: "",
   });
-
+console.log("data", data)
   const updateFields = (e, property) => {
     setData((data) => ({
       ...data,
@@ -68,29 +67,34 @@ function Register() {
             size="lg"
             color="blue"
             value={data?.name}
-            onChange={() => updateFields(e, username)}
+            onChange={(e) => updateFields(e, "username")}
           />
-          <Input label="Email" size="lg" color="blue" value={data?.email} />
+          <Input 
+             label="Email" 
+             size="lg" 
+             color="blue" 
+             value={data?.email} 
+             onChange={(e) => updateFields(e, "email")} />
           <Input
             label="Password"
             size="lg"
             color="blue"
             value={data?.password}
-            onChange={() => updateFields(e, password)}
+            onChange={(e) => updateFields(e, "password")}
           />
           <Input
             label="Re-Enter Password"
             size="lg"
             color="blue"
             value={data?.confirmPassword}
-            onChange={() => updateFields(e, confirmPassword)}
+            onChange={(e) => updateFields(e, "confirmPassword")}
           />
           <Input
             label="Address"
             size="lg"
             color="blue"
             value={data?.address}
-            onChange={() => updateFields(e, address)}
+            onChange={(e) => updateFields(e, "address")}
           />
         </CardBody>
         <CardFooter className="flex justify-between items-center">
