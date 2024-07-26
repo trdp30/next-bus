@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import RegisterForm from "../../Forms/RegisterForm.jsx"
 import {
   Button,
   Card,
@@ -8,25 +9,14 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { ownerSchema } from "../../schema/register.schema";
+import { useForm } from "react-hook-form";
 
 function Register() {
-  const [data, setData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    address: "",
-  });
-console.log("data", data)
-  const updateFields = (e, property) => {
-    setData((data) => ({
-      ...data,
-      [property]: e.target.value,
-    }));
-  };
-  const handleSubmit = () => {
-    ownerSchema.safeParse(data);
-  };
+  const method = useForm()
+const onSubmit = (data) => {
+  console.log("Form data submitted:", data);
+ };
+
   return (
     <div className="flex justify-center items-center my-10">
       <Card className="basis-96">
@@ -62,46 +52,13 @@ console.log("data", data)
           <span>Please fill out the form below to get started</span>
         </Typography>
         <CardBody className="flex flex-col gap-4">
-          <Input
-            label="Name"
-            size="lg"
-            color="blue"
-            value={data?.name}
-            onChange={(e) => updateFields(e, "username")}
-          />
-          <Input 
-             label="Email" 
-             size="lg" 
-             color="blue" 
-             value={data?.email} 
-             onChange={(e) => updateFields(e, "email")} />
-          <Input
-            label="Password"
-            size="lg"
-            color="blue"
-            value={data?.password}
-            onChange={(e) => updateFields(e, "password")}
-          />
-          <Input
-            label="Re-Enter Password"
-            size="lg"
-            color="blue"
-            value={data?.confirmPassword}
-            onChange={(e) => updateFields(e, "confirmPassword")}
-          />
-          <Input
-            label="Address"
-            size="lg"
-            color="blue"
-            value={data?.address}
-            onChange={(e) => updateFields(e, "address")}
-          />
+        <RegisterForm  method={method} />
         </CardBody>
         <CardFooter className="flex justify-between items-center">
           <Typography variant="small" className="text-gray-400 font-medium">
             NO ACCOUNT ? <span className="text-[#06b6d4]">SIGN UP</span>{" "}
           </Typography>
-          <Button className="bg-[#06b6d4]" onClick={handleSubmit}>
+          <Button className="bg-[#06b6d4]" onClick={method.handleSubmit(onSubmit)}>
             Login
           </Button>
         </CardFooter>
