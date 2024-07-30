@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import RegisterForm from "../../Forms/RegisterForm.jsx"
+import RegisterForm from "../Forms/RegisterForm";
 import {
   Button,
   Card,
@@ -8,7 +8,6 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import { ownerSchema } from "../../schema/register.schema";
 import { useForm } from "react-hook-form";
 
 function Register() {

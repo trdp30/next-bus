@@ -1,16 +1,26 @@
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { Button, Input, Select, Option } from '@material-tailwind/react';
-const MyForm = () => {
-    const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
+import { Button, Input } from '@material-tailwind/react';
+import { useLocation } from 'react-router';
+const VehicleRegForm = () => {
+    const location = useLocation();
+    const initialValues = location?.state?.data || {
+        gender: 'female',
+        email:"abc@gmial.com",
+        drivers: [
+            { name: 'Driver 1', phoneNumber: '1234567890' }
+        ]
+    };;
+    console.log("location", location?.state?.data)
+    const { register, handleSubmit, watch, formState: { errors }, control } = useForm({ defaultValues: initialValues });
     const onSubmit = (data) => {
         console.log({ data });
     };
     const password = watch('password');
     const { fields, append, remove } = useFieldArray({
         control,
-        name: 'drivers' // Name of your array field
-      });
+        name: 'drivers'
+    });
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <select className='border-2 w-full h-10' {...register("gender")}>
@@ -66,26 +76,26 @@ const MyForm = () => {
                 {errors?.verifyPassword && <p className="text-red-600">{errors?.verifyPassword?.message}</p>}
             </div>
             <div>
-        {fields.map((field, index) => (
-          <div key={field.id} className='my-3'>
-            <Input
-              type="text"
-              label={`Driver Name ${index + 1}`}
-              {...register(`drivers.${index}.name`)}
-            />
-            <Input
-            className='my-3'
-              type="text"
-              label={`Phone Number ${index + 1}`}
-              {...register(`drivers.${index}.phoneNumber`)}
-            />
-            <button type="button" onClick={() => remove(index)}>Remove</button>
-          </div>
-        ))}
-        <button type="button" onClick={() => append({ name: '', phoneNumber: '' })}>Add Driver</button>
-      </div>
+                {fields.map((field, index) => (
+                    <div key={field.id} className='my-3'>
+                        <Input
+                            type="text"
+                            label={`Driver Name ${index + 1}`}
+                            {...register(`drivers.${index}.name`)}
+                        />
+                        <Input
+                            className='my-3'
+                            type="text"
+                            label={`Phone Number ${index + 1}`}
+                            {...register(`drivers.${index}.phoneNumber`)}
+                        />
+                        <button type="button" onClick={() => remove(index)}>Remove</button>
+                    </div>
+                ))}
+                <button type="button" onClick={() => append({ name: '', phoneNumber: '' })}>Add Driver</button>
+            </div>
             <Button type="submit">Submit</Button>
         </form>
     );
 };
-export default MyForm;
+export default VehicleRegForm;
