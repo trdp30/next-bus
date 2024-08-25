@@ -22,7 +22,7 @@ const firebaseConfig = {
 
 let app, analytics, auth, googleProvider;
 
-app = initializeApp(firebaseConfig, "menuOnRoad");
+app = initializeApp(firebaseConfig, "next-bus");
 
 analytics = getAnalytics(app);
 
