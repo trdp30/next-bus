@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-
+import { Outlet } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 import Loader from "../Loader";
 
-function AuthenticatedRoute(props) {
+function AuthenticatedRoute() {
   const { isAuthenticated, isAuthenticating } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ function AuthenticatedRoute(props) {
     return <Loader />;
   }
 
-  return <>{props.children}</>;
+  return <Outlet />;
 }
 
 AuthenticatedRoute.propTypes = {

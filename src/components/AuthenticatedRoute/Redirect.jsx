@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 export const Redirect = () => {
   const { queryParams } = useContext(AuthContext);
   const navigate = useNavigate();
+  console.log("loaded redirect");
 
   useEffect(() => {
     if (queryParams?.from) {

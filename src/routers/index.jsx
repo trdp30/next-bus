@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Singin from "../components/Signin/Singin";
+import SignIn from "../components/Signin/Singin";
 import { createBrowserRouter } from "react-router-dom";
 import RootErrorPage from "./RootErrorPage";
 import AuthenticatedRoute from "../components/AuthenticatedRoute";
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "login",
-        element: Singin,
+        element: <SignIn />,
       },
       {
         element: <AuthenticatedRoute />,
@@ -21,6 +21,58 @@ const router = createBrowserRouter([
           {
             path: "redirect",
             element: <Redirect />,
+          },
+          {
+            path: "create-user",
+            element: <div>Create user</div>,
+          },
+          {
+            path: "owner",
+            element: (
+              <div>
+                Owner Layout
+                <br />
+                <Outlet />
+              </div>
+            ),
+            children: [
+              {
+                path: "dashboard",
+                element: <div>Dashboard</div>,
+              },
+              {
+                path: "vehicle",
+                element: <div>vehicles</div>,
+              },
+              {
+                path: "vehicle/:vehicleId",
+                element: <div>vehicle by id</div>,
+              },
+              {
+                path: "driver",
+                element: <div>drivers</div>,
+              },
+              {
+                path: "driver/:driverId",
+                element: <div>drivers by id</div>,
+              },
+              {
+                path: "assistant-driver",
+                element: <div>assistant-drivers</div>,
+              },
+              {
+                path: "assistant-driver/:assistantDriverId",
+                element: <div>assistant-drivers by id</div>,
+              },
+              {
+                path: "handyman",
+                element: <div>handyman</div>,
+              },
+              {
+                path: "handyman/:handymanId",
+                element: <div>handyman by id</div>,
+              },
+            ],
           },
         ],
       },
