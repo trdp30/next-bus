@@ -7,6 +7,7 @@ import Loader from "../Loader";
 
 function AuthenticatedRoute() {
   const { isAuthenticated, isAuthenticating } = useContext(AuthContext);
+  console.log("isAuthenticated", isAuthenticated);
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, signInWithPopup } from "firebase/auth";
 import { useForm } from 'react-hook-form';
-import { Input } from '@material-tailwind/react';
 import { auth, googleProvider } from "../../utils/firebase";
-import logo from "../../assets/logo.png";
 import Modal from 'react-modal';
+import { Input } from '../ui/input';
 Modal.setAppElement('#root'); // Required for accessibility
 const SignIn = () => {
     const initialValues = {
@@ -41,7 +40,7 @@ const SignIn = () => {
             const user = userCredential.user;
             console.log("user--->>>", user)
             if (user.emailVerified) {
-                navigate('/dashboard'); // Redirect to Dashboard on successful sign-in
+                navigate('/owner/vehicle'); // Redirect to Dashboard on successful sign-in
             } else {
                 setUserEmail(data.email);
                 setShowModal(true); // Show the modal if the email is not verified
@@ -54,7 +53,7 @@ const SignIn = () => {
     const signInWithGoogle = async () => {
         try {
             await signInWithPopup(auth, googleProvider);
-            navigate('/dashboard'); // Redirect to Dashboard on successful Google sign-in
+            navigate('/owner/vehicle'); // Redirect to Dashboard on successful Google sign-in
         } catch (err) {
             console.error('Error signing in with Google:', err);
             alert('Failed to sign in with Google. Please try again.');
@@ -83,6 +82,7 @@ const SignIn = () => {
                 {/* <img src={logo} alt='logo' className='w-full h-auto items-center mb-5 rounded-lg' /> */}
                 {/* {!signupComplete && ( */}
                     <form onSubmit={handleSubmit(onSignUp)} className="space-y-6">
+                        
                         <div>
                             <Input
                                 type="email"

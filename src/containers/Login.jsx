@@ -7,8 +7,8 @@ import {
 // import {auth} from "../../utils/firebase"
 import { auth } from "../utils/firebase";
 import { useForm } from "react-hook-form";
-import { Input } from "@material-tailwind/react";
 import logo from "../assets/logo.png";
+import { Input } from "@/components/ui/input";
 const Login = () => {
   const [data, setData] = React.useState(false);
   const initialValues = {

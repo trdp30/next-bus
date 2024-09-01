@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, IconButton } from "@material-tailwind/react";
+import { Button } from "../ui/button";
 // import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 const CircularPagination = ({
     pageIndex,
@@ -23,13 +23,13 @@ const CircularPagination = ({
   
       if (totalPageCount <= 5) {
         return pageOptions.map((page) => (
-          <IconButton
+          <button
             key={page}
             {...getItemProps(page)}
             onClick={() => handlePageClick(page)}
           >
             {page}
-          </IconButton>
+          </button>
         ));
       } else {
         const buttons = [];
@@ -38,13 +38,13 @@ const CircularPagination = ({
   
         if (startPage > 1) {
           buttons.push(
-            <IconButton
+            <button
               key={1}
               {...getItemProps(1)}
               onClick={() => handlePageClick(1)}
             >
               1
-            </IconButton>
+            </button>
           );
           if (startPage > 2) {
             buttons.push(<span key="ellipsis-start">...</span>);
@@ -53,13 +53,13 @@ const CircularPagination = ({
   
         for (let page = startPage; page <= endPage; page++) {
           buttons.push(
-            <IconButton
+            <button
               key={page}
               {...getItemProps(page)}
               onClick={() => handlePageClick(page)}
             >
               {page}
-            </IconButton>
+            </button>
           );
         }
   
@@ -68,13 +68,14 @@ const CircularPagination = ({
             buttons.push(<span key="ellipsis-end">...</span>);
           }
           buttons.push(
-            <IconButton
+            
+            <button
               key={totalPageCount}
               {...getItemProps(totalPageCount)}
               onClick={() => handlePageClick(totalPageCount)}
             >
               {totalPageCount}
-            </IconButton>
+            </button>
           );
         }
   

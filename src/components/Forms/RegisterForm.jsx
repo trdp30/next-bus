@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Input } from "@material-tailwind/react";
+import { Input } from "../ui/input";
 const RegisterForm = ({ method }) => {
   const {
     register,

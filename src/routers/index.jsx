@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import SignIn from "../components/Signin/Singin";
 import { createBrowserRouter } from "react-router-dom";
 import RootErrorPage from "./RootErrorPage";
 import AuthenticatedRoute from "../components/AuthenticatedRoute";
 import { Redirect } from "../components/AuthenticatedRoute/Redirect";
+import CreateUser from "../containers/CreateUser";
+import VehicleTable from "@/containers/VehicleTable";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +14,11 @@ const router = createBrowserRouter([
     errorElement: <RootErrorPage />,
     children: [
       {
+        index: true,
+        element: <Navigate to="login"  replace/>,
+      },
+      {
+        index: true,
         path: "login",
         element: <SignIn />,
       },
@@ -24,7 +31,7 @@ const router = createBrowserRouter([
           },
           {
             path: "create-user",
-            element: <div>Create user</div>,
+            element: <CreateUser />,
           },
           {
             path: "owner",
@@ -42,7 +49,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "vehicle",
-                element: <div>vehicles</div>,
+                element: <VehicleTable />,
               },
               {
                 path: "vehicle/:vehicleId",

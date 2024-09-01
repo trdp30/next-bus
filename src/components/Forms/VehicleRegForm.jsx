@@ -1,7 +1,8 @@
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { Button, Input } from '@material-tailwind/react';
 import { useLocation } from 'react-router';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 const VehicleRegForm = () => {
     const location = useLocation();
     const initialValues = location?.state?.data || {

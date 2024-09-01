@@ -1,143 +1,152 @@
 import React from "react";
+// import {
+//   useTable,
+//   usePagination,
+//   useGlobalFilter,
+//   useSortBy,
+// } from "react-table";
 import {
-  useTable,
-  usePagination,
-  useGlobalFilter,
-  useSortBy,
-} from "react-table";
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 import { useNavigate } from "react-router";
-import CircularPagination from "../Pagination/CircularPagination";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+// import CircularPagination from "../Pagination/CircularPagination";
 
 
 
-const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
-  return (
-    <input
-      value={globalFilter || ""}
-      onChange={(e) => setGlobalFilter(e.target.value || undefined)}
-      placeholder="Type to search..."
-      className="px-2 py-1 border rounded"
-    />
-  );
-};
+// const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
+//   return (
+//     <input
+//       value={globalFilter || ""}
+//       onChange={(e) => setGlobalFilter(e.target.value || undefined)}
+//       placeholder="Type to search..."
+//       className="px-2 py-1 border rounded"
+//     />
+//   );
+// };
 
 const CustomTable = ({ columns, data, actions }) => {
   const navigate = useNavigate();
-  const sortees = React.useMemo(
-    () => [
-      {
-        id: "CreatedDate",
-        desc: true,
-      },
-    ],
-    []
-  );
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    nextPage,
-    previousPage,
-    setGlobalFilter,
-    gotoPage,
-    state: { pageIndex, pageSize, globalFilter },
-  } = useTable(
-    {
-      columns,
-      data,
-      disableSortRemove: true,
-      initialState: { pageIndex: 0, pageSize: 10, sortBy: sortees }, // Initial page index and page size
+  const [sorting, setSorting] = React.useState([]);
+  const [filtering, setFiltering] = React.useState([]);
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting: sorting,
+      globalFilter: filtering
     },
-    useGlobalFilter,
-    useSortBy,
-    usePagination
-  );
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setFiltering,
 
-
+  })
 
   return (
     <div className="h-screen">
+      <Input
+        value={filtering}
+        onChange={e => setFiltering(e.target.value)}
+        placeholder="Search..."
+        className="px-2 py-1 border rounded w-96 my-5 ml-5"
+      />
       <div className="bg-blue-gray-300 p-3 flex flex-row justify-between items-center">
-        <GlobalFilter
+        {/* <GlobalFilter
           globalFilter={globalFilter}
           setGlobalFilter={setGlobalFilter}
-        />
+        /> */}
       </div>
       {data?.length ? (
         <>
-        <div className={`overflow-x-scroll overflow-y-scroll max-h-[550px]`}>
-          <table className="h-fit w-fit" {...getTableProps()}>
-            <thead>
-              {headerGroups.map((headerGroup) => (
-                <tr className="border-2" {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
-                    <th
-                      key={column.id}
-                      className="border-2 h-14 px-2 cursor-pointer"
-                      style={{ maxWidth: column.width }} 
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                    >
-                      {column.render("Header")}
-                      <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? " 🔽"
-                            : " 🔼"
-                          : ""}
-                      </span>
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row, i) => {
-                prepareRow(row);
-                return (
-                  <tr
-                    {...row.getRowProps()}
-                    className={`border-2 h-14 ${i % 2 === 0 ? "bg-gray-100" : "bg-white"
-                      } hover:bg-blue-200`}
-                  >
-                    {row.cells.map((cell) => (
-                      <td
-                        key={cell.column.id}
-                        className="border-2 px-5"
-                        style={{ width: cell.column.width }} 
-                        {...cell.getCellProps()}
-                      >
-                        {cell.column.id === "actions" ? (
-                          <div className="flex space-x-1">
-                            {actions.map((action) => (
-                              <button
-                                key={action.name}
-                                className={`px-2 py-1 rounded ${action.buttonClass}`}
-                                onClick={() => action.onClick(row.original)}
-                              >
-                                {action.icon && (
-                                  <action.icon className="mr-1" />
-                                )}
-                              </button>
-                            ))}
-                          </div>
-                        ) : (
-                          cell.render("Cell")
-                        )}
+          <div className={`overflow-x-scroll overflow-y-scroll max-h-[550px] w3-container`}>
+            <table className="w-full w3-table-all">
+              <thead>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                      <th key={header.id} onClick={header.column.getToggleSortingHandler()} className="cursor-pointer" style={{ width: header.getSize() }}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        {
+                        { asc: '▲', desc: '▼' }[header?.column.getIsSorted () ?? null]
+                        }
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map(row => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
                     ))}
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-      
-        </div>
-            <div className="flex justify-center items-center mt-4">
+                ))}
+              </tbody>
+              <tfoot>
+                {table.getFooterGroups().map(footerGroup => (
+                  <tr key={footerGroup.id}>
+                    {footerGroup.headers.map(header => (
+                      <th key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                            header.column.columnDef.footer,
+                            header.getContext()
+                          )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </tfoot>
+            </table>
+
+          </div>
+          <div className="w-full flex justify-center gap-3">
+            <Button
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              First Page
+            </Button>
+            <Button
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous Page
+            </Button>
+            <Button
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next Page
+            </Button>
+            <Button
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              Last Page
+            </Button>
+          </div>
+          {/* <div className="flex justify-center items-center mt-4">
             <CircularPagination
               pageIndex={pageIndex}
               canPreviousPage={canPreviousPage}
@@ -147,7 +156,7 @@ const CustomTable = ({ columns, data, actions }) => {
               previousPage={previousPage}
               gotoPage={gotoPage}
             />
-          </div>
+          </div> */}
         </>
       ) : (
         <div className="flex items-center justify-center font-extrabold text-3xl text-gray-300 h-32">
